@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Calculator</title>
+    <link rel = "stylesheet" href = "styles.css">
+</head>
+<body>
+        <form action="" id = "calculator">
+            <h1>Калькулятор стоимости товаров</h1>
+            <div class = "inner">  
+            <input name="Number" type="text" id="number" placeholder  = "Введите количество товаров">
+            <select name="Goods" id="goods">
+                <option value = "0">Выберите тип товара:</option>
+                <option value="150">Розы</option>
+                <option value="200">Тюльпаны</option>
+                <option value="250">Плюшевый медведь</option>
+            </select>
+            </div> 
+            <div id = "radios">
+                <label><input name = "radio-group" type = "radio" value="100"><br>С белой открыткой</label>
+                <label><input name = "radio-group" type = "radio" value="100"><br>С черной открыткой</label>
+                <label><input name = "radio-group" type = "radio" value="0" checked="checked" ><br>Без открытки</label>
+            </div>
+            <div class = "inner">
+                <select id = "select2">
+                <option value = "1">Выберите цвет товара:</option>
+                <option value="150">Белый</option>
+                <option value="200">Красный</option>
+                </select>
+            </div>
+            <button type="button" id = "my-button"> Обработать</button>
+            <div id="result"></div>
+        </form>
+    <script src="script.js"></script>
+</body>
+</html>
