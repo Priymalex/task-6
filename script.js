@@ -1,65 +1,72 @@
-function calculate(event) {
-  event.preventDefault();
-  let t1 = document.getElementById("number");
-  let t2 = document.getElementById("goods");
-  let res = document.getElementById("result");
-  let rad = document.getElementById("radios");
-  let sel = document.getElementById("select2")
-  let regex = /^\d+$/;
-  let isValid = regex.test(t1.value);
-  
-  if((isValid && parseInt(t2.value) != 0) && ((sel.style.display !== "none" && sel.value !== "1") || sel.style.display == "none" ))
-  {
-  alert("Вычисления окончены");
-  let quantity = parseInt(t1.value);
-  let price = parseInt(t2.value);
-  let total = quantity * price;
-  if(rad.style.display !== "none")
-  {
-    let selectedRadio = document.querySelector('input[name="radio-group"]:checked');
-    if(selectedRadio) {
-      total = total + parseInt(selectedRadio.value);
-    }
-  }
-  if(sel.style.display !== "none")
-  {
-    total = total * parseInt(sel.value);
-  }
-  res.innerHTML = "Общая стоимость: " + total + " руб.";
-  }
-  
-  else
-  {
-    alert("ОШИБКА!")
-  }
-}
-
 window.addEventListener('DOMContentLoaded', function (event) {
   console.log("DOM fully loaded and parsed");
-  let b = document.getElementById("my-button");
-  b.addEventListener("click", calculate);
-  let s = document.getElementById("goods");
-  s.addEventListener("change", function(event){
-    let select = event.target;
-    let radios = document.getElementById("radios");
-    let sel = document.getElementById("select2")
-    console.log(select.value);
-    if(select.value == "250")
-    {
-       radios.style.display = "none";
-    }
-    else
-    {
-      radios.style.display = "flex";
-    }
-    if(select.value == "150")
-    {
-        sel.style.display = "none";
-    }
-    else
-    {
-       sel.style.display = "flex";
-    }
-  })
+  let numberSelect = document.getElementById("number");
+  let productSelect = document.getElementById("goods");
+  let parameterSelect = document.getElementById("radios");
+  let colorSelect = document.getElementById("select2");
+  let resultDiv = document.getElementById("result");
 
-})
+  function calculateTotal() {
+    let num = numberSelect.value;
+    let productPrice = parseInt(productSelect.value);
+    let radioValue = getSelectedRadioValue();
+    let colorMultiplier = parseFloat(colorSelect.value);
+
+    let regex = /^\d+$/;
+    let isValid = regex.test(num);
+
+    if (isValid && productPrice > 0) {
+      let total = (parseInt(num) * productPrice + parseInt(radioValue)) * colorMultiplier;
+      resultDiv.innerHTML = "Стоимость: " + total + " руб.";
+    } else if (!isValid && num !== "") {
+      resultDiv.innerHTML = "Введите корректное количество";
+    } else {
+      resultDiv.innerHTML = "Выберите тип товара";
+    }
+  }
+
+  function getSelectedRadioValue() {
+    let radios = document.getElementsByName("radio-group");
+    for (let radio of radios) {
+      if (radio.checked) {
+        return parseInt(radio.value);
+      }
+    }
+    return 0;
+  }
+
+  productSelect.addEventListener("change", function(event) {
+    let selectedOption = event.target.value;
+    
+    if (selectedOption === "150") { 
+      parameterSelect.style.display = "flex";
+      colorSelect.style.display = "flex";
+    } 
+    else if (selectedOption === "200") {
+      parameterSelect.style.display = "none";
+      colorSelect.style.display = "flex";
+    } 
+    else if (selectedOption === "250") { 
+      parameterSelect.style.display = "flex";
+      colorSelect.style.display = "none";
+    } 
+    else {
+      parameterSelect.style.display = "none";
+      colorSelect.style.display = "none";
+    }
+    
+    calculateTotal();
+  });
+
+  
+  numberSelect.addEventListener("input", calculateTotal);
+  
+  let radios = document.getElementsByName("radio-group");
+  for (let radio of radios) {
+    radio.addEventListener("change", calculateTotal);
+  }
+  
+  colorSelect.addEventListener("change", calculateTotal);
+
+  calculateTotal();
+});
